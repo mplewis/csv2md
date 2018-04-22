@@ -5,4 +5,4 @@ set -euo pipefail
 IFS=$'\n\t'
 
 ./build.sh
-./test_math.native
+./test_table.native

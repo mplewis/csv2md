@@ -4,4 +4,4 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-ocamlbuild -I src src/math.native test/test_math.native
+ocamlbuild -I src src/table.native test/test_table.native
