@@ -4,5 +4,5 @@
 
 PKG batteries
 PKG oUnit
-S *
-B _build/
+S src/**
+B _build/**

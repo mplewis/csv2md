@@ -1,4 +1,5 @@
 open OUnit2
+open Math
 
 let ae exp got _test_ctxt = assert_equal exp got
 
