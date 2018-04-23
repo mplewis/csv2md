@@ -14,8 +14,23 @@ let pad_left_tests = [
   ae (pad_right "foobar" 4) "foobar";
 ]
 
+let transpose_tests = [
+  "transposes correctly" >::
+  (ae
+     (transpose
+        [[1; 2; 3];
+         [4; 5; 6];
+         [7; 8; 9]])
+     [[1; 4; 7];
+      [2; 5; 8];
+      [3; 6; 9]]);
+]
+
 let () =
   run_test_tt_main (
     "table tests" >:::
-    List.concat [pad_left_tests]
+    List.concat [
+      pad_left_tests;
+      transpose_tests;
+    ]
   )
