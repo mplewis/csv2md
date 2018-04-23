@@ -26,11 +26,33 @@ let transpose_tests = [
       [3; 6; 9]]);
 ]
 
+
+let col_widths_tests = [
+  "gets the max width of each column 1" >::
+  (ae
+     (col_widths
+        [["foo"; "bar"; "baz"];
+         ["alpha"; "b"; "charlie"]])
+     [5; 3; 7]
+  );
+
+  "gets the max width of each column 2" >::
+  (ae
+     (col_widths
+        [["Kara"; "Thrace"];
+         ["William"; "Adama"];
+         ["Gaius"; "Baltar"]])
+     [7; 6]
+  )
+]
+
+
 let () =
   run_test_tt_main (
     "table tests" >:::
     List.concat [
       pad_left_tests;
       transpose_tests;
+      col_widths_tests;
     ]
   )

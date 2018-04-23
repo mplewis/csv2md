@@ -11,3 +11,8 @@ let rec transpose list = match list with
   | []   :: xss    -> transpose xss
   | (x::xs) :: xss ->
     (x :: List.map List.hd xss) :: transpose (xs :: List.map List.tl xss)
+
+let col_widths (table: string list list): int list =
+  let longest_in_row (row: string list) =
+    row |> List.map String.length |> List.reduce Int.max in
+  table |> transpose |> List.map longest_in_row
