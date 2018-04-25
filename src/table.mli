@@ -1,5 +1,5 @@
 (* Pad the right side of a string to a minimum length *)
-val pad_right : string -> int -> string
+val pad_right : int -> string -> string
 
 (* Wrap both sides of a string with another string a number of times *)
 val wrap : string -> string -> int -> string

@@ -1,9 +1,9 @@
 open Batteries
 
-let rec pad_right str len =
-  if String.length str >= len
-  then str
-  else pad_right (str ^ " ") (len - 1)
+let rec pad_right target_len str =
+  let curr_len = String.length str in
+  let spaces = max 0 (target_len - curr_len) in
+  str ^ String.repeat " " spaces
 
 let rec wrap middle outer count =
   if count <= 0
@@ -24,14 +24,13 @@ let col_widths table =
     row |> List.map String.length |> List.reduce Int.max in
   table |> List.transpose |> List.map longest_in_row
 
-(*
 let equalize_col_widths table =
   let widths = col_widths table in
-  let pad_cells (widths: int list) (table: string list) =
-    let pairs = zip
+  let pad_cells (row: string list): string list =
+    (zip widths row)
+    |> List.map (fun (t: int * string) -> pad_right (fst t) (snd t))
   in
-  ()
-*)
+  table |> List.map pad_cells
 
 let md_of_table table divider =
   table |> List.map (String.join divider) |> String.join "\n"

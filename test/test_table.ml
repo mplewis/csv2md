@@ -7,16 +7,20 @@ let puts thing = thing |> Batteries.dump |> print_endline
 let pad_right_tests =
   let subject = pad_right in
   [
-    "pads shorter strings" >:: ae
-      (subject "baz" 4)
+    "pads shorter strings 1" >:: ae
+      (subject 4 "baz")
       "baz ";
 
+    "pads shorter strings 2" >:: ae
+      (subject 10 "baz")
+      "baz       ";
+
     "does not pad equal-length strings" >:: ae
-      (subject "quux" 4)
+      (subject 4 "quux")
       "quux";
 
     "does not pad longer strings" >:: ae
-      (subject "foobar" 4)
+      (subject 4 "foobar")
       "foobar";
   ]
 
