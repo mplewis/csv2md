@@ -65,6 +65,20 @@ let col_widths_tests =
       [7; 6];
   ]
 
+let md_of_row_tests =
+  let subject = md_of_row in
+  [
+    "renders a table row as a string 1" >::
+    ae
+      (subject [3; 3; 3] ["foo"; "bar"; "baz"])
+      "| foo | bar | baz |";
+
+    "renders a table row as a string 2" >::
+    ae
+      (subject [6; 7; 5] ["foo"; "bar"; "baz"])
+      "| foo    | bar     | baz   |";
+  ]
+
 let md_of_table_tests = [
   "renders a table as a string" >::
   let subject = md_of_table in
@@ -87,6 +101,7 @@ let () =
       wrap_tests;
       zip_tests;
       col_widths_tests;
+      md_of_row_tests;
       (* md_of_table_tests; *)
     ]
   )

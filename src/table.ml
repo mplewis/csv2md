@@ -32,5 +32,15 @@ let equalize_col_widths table =
   in
   table |> List.map pad_cells
 
+let md_of_row widths cells =
+  let padded_cells =
+    zip widths cells
+    |> List.map (fun t -> pad_right (fst t) (snd t))
+  in
+  padded_cells
+  |> List.map (wrap " " 1)
+  |> String.join "|"
+  |> wrap "|" 1
+
 let md_of_table table divider =
   table |> List.map (String.join divider) |> String.join "\n"
