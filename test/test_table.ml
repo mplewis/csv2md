@@ -70,28 +70,43 @@ let md_of_row_tests =
   [
     "renders a table row as a string 1" >::
     ae
-      (subject [3; 3; 3] ["foo"; "bar"; "baz"])
+      (subject [3; 3; 3] ["foo"; "bar"; "baz"] "|")
       "| foo | bar | baz |";
 
     "renders a table row as a string 2" >::
     ae
-      (subject [6; 7; 5] ["foo"; "bar"; "baz"])
-      "| foo    | bar     | baz   |";
+      (subject [6; 7; 5] ["foo"; "bar"; "baz"] "•")
+      "• foo    • bar     • baz   •";
   ]
 
-let md_of_table_tests = [
-  "renders a table as a string" >::
+let header_row_tests =
+  let subject = header_row in
+  [
+    "renders a header row 1" >::
+    ae
+      (subject [3; 3; 3] "|" "-")
+      "| --- | --- | --- |";
+
+    "renders a header row 2" >::
+    ae
+      (subject [5; 7; 5] "!" "_")
+      "! _____ ! _______ ! _____ !";
+  ]
+
+let md_of_table_tests =
   let subject = md_of_table in
-  ae
-    (subject
-       [["Kara"; "Thrace"];
-        ["William"; "Adama"];
-        ["Gaius"; "Baltar"]]
-       " | ")
-    "Kara    | Thrace
+  [
+    "renders a table as a string" >::
+    ae
+      (subject
+         [["Kara"; "Thrace"];
+          ["William"; "Adama"];
+          ["Gaius"; "Baltar"]]
+         " | ")
+      "Kara    | Thrace
 William | Adama
 Gaius   | Baltar";
-]
+  ]
 
 let () =
   run_test_tt_main (
@@ -102,6 +117,7 @@ let () =
       zip_tests;
       col_widths_tests;
       md_of_row_tests;
+      header_row_tests;
       (* md_of_table_tests; *)
     ]
   )
