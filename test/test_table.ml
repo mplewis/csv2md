@@ -1,8 +1,30 @@
+open Batteries
 open OUnit2
 open Table
 
 let ae exp got _test_ctxt = assert_equal exp got
 let puts thing = thing |> Batteries.dump |> print_endline
+
+let count_leading_spaces str =
+  let rec helper chars count =
+    if List.is_empty chars || List.hd chars != ' ' then count
+    else helper (List.tl chars) (count + 1)
+  in
+  helper (String.to_list str) 0
+
+let is_blank str = str |> String.trim |> String.length = 0
+
+let rec drop_head_whitespace_lines lines =
+  if is_blank (List.hd lines) then drop_head_whitespace_lines (List.tl lines) else lines
+
+let drop_surrounding_whitespace_lines lines =
+  lines |> drop_head_whitespace_lines |> List.rev |> drop_head_whitespace_lines |> List.rev
+
+let heredoc str =
+  let lines = String.split_on_char '\n' str |> drop_surrounding_whitespace_lines in
+  let padding = lines |> List.map count_leading_spaces |> List.min in
+  let drop_padding str = str |> String.to_list |> List.drop padding |> String.of_list in
+  lines |> List.map drop_padding |> String.join "\n"
 
 let pad_right_tests =
   let subject = pad_right in
@@ -68,44 +90,42 @@ let col_widths_tests =
 let md_of_row_tests =
   let subject = md_of_row in
   [
-    "renders a table row as a string 1" >::
-    ae
-      (subject [3; 3; 3] ["foo"; "bar"; "baz"] "|")
+    "renders a table row as a string 1" >:: ae
+      (subject "|" [3; 3; 3] ["foo"; "bar"; "baz"])
       "| foo | bar | baz |";
 
-    "renders a table row as a string 2" >::
-    ae
-      (subject [6; 7; 5] ["foo"; "bar"; "baz"] "•")
+    "renders a table row as a string 2" >:: ae
+      (subject "•" [6; 7; 5] ["foo"; "bar"; "baz"])
       "• foo    • bar     • baz   •";
   ]
 
 let header_row_tests =
   let subject = header_row in
   [
-    "renders a header row 1" >::
-    ae
-      (subject [3; 3; 3] "|" "-")
+    "renders a header row 1" >:: ae
+      (subject "|" "-" [3; 3; 3])
       "| --- | --- | --- |";
 
-    "renders a header row 2" >::
-    ae
-      (subject [5; 7; 5] "!" "_")
+    "renders a header row 2" >:: ae
+      (subject "!" "_" [5; 7; 5])
       "! _____ ! _______ ! _____ !";
   ]
 
 let md_of_table_tests =
   let subject = md_of_table in
   [
-    "renders a table as a string" >::
-    ae
-      (subject
-         [["Kara"; "Thrace"];
-          ["William"; "Adama"];
-          ["Gaius"; "Baltar"]]
-         " | ")
-      "Kara    | Thrace
-William | Adama
-Gaius   | Baltar";
+    "renders a table as a string" >:: ae
+      (subject "|" "-" [["First"; "Last"];
+                        ["Kara"; "Thrace"];
+                        ["William"; "Adama"];
+                        ["Gaius"; "Baltar"]])
+      (heredoc {msg|
+        | First   | Last   |
+        | ------- | ------ |
+        | Kara    | Thrace |
+        | William | Adama  |
+        | Gaius   | Baltar |
+      |msg})
   ]
 
 let () =
@@ -118,6 +138,6 @@ let () =
       col_widths_tests;
       md_of_row_tests;
       header_row_tests;
-      (* md_of_table_tests; *)
+      md_of_table_tests;
     ]
   )

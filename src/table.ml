@@ -24,15 +24,7 @@ let col_widths table =
     row |> List.map String.length |> List.reduce Int.max in
   table |> List.transpose |> List.map longest_in_row
 
-let equalize_col_widths table =
-  let widths = col_widths table in
-  let pad_cells (row: string list): string list =
-    (zip widths row)
-    |> List.map (fun t -> pad_right (fst t) (snd t))
-  in
-  table |> List.map pad_cells
-
-let md_of_row widths cells vertdiv =
+let md_of_row vertdiv widths cells =
   let padded_cells =
     zip widths cells
     |> List.map (fun t -> pad_right (fst t) (snd t))
@@ -42,11 +34,16 @@ let md_of_row widths cells vertdiv =
   |> String.join vertdiv
   |> wrap vertdiv 1
 
-let header_row widths vertdiv horizdiv =
+let header_row vertdiv horizdiv widths =
   let horizdiv_cells =
     widths |> List.map (fun count -> String.repeat horizdiv count)
   in
-  md_of_row widths horizdiv_cells vertdiv
+  md_of_row vertdiv widths horizdiv_cells
 
-let md_of_table table divider =
-  table |> List.map (String.join divider) |> String.join "\n"
+let md_of_table vertdiv horizdiv table =
+  let widths = col_widths table in
+  let header = header_row vertdiv horizdiv widths in
+  table
+  |> List.map (md_of_row vertdiv widths)
+  |> (fun rows -> [List.hd rows; header] @ List.tl rows)
+  |> String.join "\n"
