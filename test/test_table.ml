@@ -28,15 +28,15 @@ let wrap_tests =
   let subject = wrap in
   [
     "wraps strings 1" >:: ae
-      (subject "foo" " " 2)
+      (subject " " 2 "foo")
       "  foo  ";
 
     "wraps strings 2" >:: ae
-      (subject "alert" "!" 3)
+      (subject "!" 3 "alert")
       "!!!alert!!!";
 
     "does not wrap with zero" >:: ae
-      (subject "baz" " " 0)
+      (subject " " 0 "baz")
       "baz";
   ]
 

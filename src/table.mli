@@ -2,7 +2,7 @@
 val pad_right : int -> string -> string
 
 (* Wrap both sides of a string with another string a number of times *)
-val wrap : string -> string -> int -> string
+val wrap : string -> int -> string -> string
 
 (* Zip two lists together, element-wise *)
 val zip : 'a list -> 'b list -> ('a * 'b) list

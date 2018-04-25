@@ -5,10 +5,10 @@ let rec pad_right target_len str =
   let spaces = max 0 (target_len - curr_len) in
   str ^ String.repeat " " spaces
 
-let rec wrap middle outer count =
+let rec wrap wrapper count body =
   if count <= 0
-  then middle
-  else wrap (outer ^ middle ^ outer) outer (count - 1)
+  then body
+  else wrap wrapper (count - 1) (wrapper ^ body ^ wrapper)
 
 let zip a b =
   let rec zipr a b last =
