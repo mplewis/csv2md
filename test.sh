@@ -6,3 +6,4 @@ IFS=$'\n\t'
 
 ./build.sh
 ./test_table.native
+./test_heredoc.native

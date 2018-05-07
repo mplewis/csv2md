@@ -4,5 +4,6 @@
 
 PKG batteries
 PKG oUnit
+PKG mustache
 S src/**
 B _build/**
