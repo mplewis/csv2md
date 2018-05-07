@@ -26,7 +26,7 @@ let heredoc_tests =
 
 let () =
   run_test_tt_main (
-    "table tests" >:::
+    "heredoc tests" >:::
     List.concat [
       heredoc_tests;
     ]
