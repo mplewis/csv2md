@@ -1,9 +1,8 @@
 open Batteries
 open OUnit2
-open Heredoc
+open Helpers
 
-let ae exp got _test_ctxt = assert_equal exp got
-let puts thing = thing |> Batteries.dump |> print_endline
+open Heredoc
 
 let heredoc_tests =
   let subject = heredoc in
